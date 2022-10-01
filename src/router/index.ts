@@ -73,22 +73,6 @@ export const constantRoutes: RouteConfig[] = [
     meta: { hidden: true }
   },
   {
-    path: '/covid19',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import(/* webpackChunkName: "covid19" */ '@/views/covid19/index.vue'),
-        name: 'covid19',
-        meta: {
-          title: 'covid19',
-          icon: 'eye-on',
-          alwaysShow: true
-        }
-      }
-    ]
-  },
-  {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
@@ -101,6 +85,35 @@ export const constantRoutes: RouteConfig[] = [
           title: 'dashboard',
           icon: 'dashboard',
           affix: true
+        }
+      }
+    ]
+  },
+  {
+    path: '/covid19',
+    component: Layout,
+    meta: {
+      title: 'covid19',
+      icon: 'eye-on',
+      alwaysShow: true
+    },
+    children: [
+      {
+        path: 'statistics',
+        component: () => import(/* webpackChunkName: "covid19" */ '@/views/covid19/statistics.vue'),
+        name: 'covid19Statistics',
+        meta: {
+          title: 'covid19Statistics',
+          icon: 'eye-on'
+        }
+      },
+      {
+        path: 'history',
+        component: () => import(/* webpackChunkName: "covid19" */ '@/views/covid19/history.vue'),
+        name: 'covid19History',
+        meta: {
+          title: 'covid19History',
+          icon: 'eye-on'
         }
       }
     ]
