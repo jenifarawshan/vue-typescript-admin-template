@@ -62,7 +62,8 @@ export default {
     clipboard: 'Clipboard',
     i18n: 'I18n',
     externalLink: 'External Link',
-    profile: 'Profile'
+    profile: 'Profile',
+    covid19: 'Covid-19'
   },
   navbar: {
     logOut: 'Log Out',

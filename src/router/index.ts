@@ -73,6 +73,22 @@ export const constantRoutes: RouteConfig[] = [
     meta: { hidden: true }
   },
   {
+    path: '/covid19',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import(/* webpackChunkName: "covid19" */ '@/views/covid19/index.vue'),
+        name: 'covid19',
+        meta: {
+          title: 'covid19',
+          icon: 'eye-on',
+          alwaysShow: true
+        }
+      }
+    ]
+  },
+  {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
