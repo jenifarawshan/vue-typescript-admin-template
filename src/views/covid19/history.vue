@@ -15,7 +15,19 @@
         ></el-option>
       </el-select>
     </div>
+
+    <el-alert
+      v-if="!selectedCountry"
+      title="Info"
+      type="info"
+      description="Please select a country"
+      show-icon
+    />
+
+    <br>
+
     <div class="chart-container" ref="chartContainer"></div>
+
   </div>
 </template>
 
@@ -256,7 +268,6 @@ export default {
             name: 'Total Deaths',
             data: []
           }
-
         ]
       }
 
@@ -288,6 +299,6 @@ export default {
 
 <style scoped>
 .chart-container {
-  height: 650px
+  height: 650px;
 }
 </style>
