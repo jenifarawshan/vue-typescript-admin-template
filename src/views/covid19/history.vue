@@ -16,18 +16,7 @@
       </el-select>
     </div>
 
-    <el-alert
-      v-if="!selectedCountry"
-      title="Info"
-      type="info"
-      description="Please select a country"
-      show-icon
-    />
-
-    <br>
-
     <div class="chart-container" ref="chartContainer"></div>
-
   </div>
 </template>
 
@@ -65,14 +54,14 @@ export default {
       this.chart.setOption({
         backgroundColor: '#394056',
         title: {
-          top: 20,
-          text: this.$t('route.covid19History'),
+          text: 'Please select a country to view Covid-19 historical data',
           textStyle: {
             fontWeight: 'normal',
             fontSize: 16,
             color: '#F1F1F3'
           },
-          left: '1%'
+          left: 'center',
+          top: 'center'
         },
         tooltip: {
           trigger: 'axis'
@@ -83,7 +72,7 @@ export default {
           itemWidth: 14,
           itemHeight: 5,
           itemGap: 13,
-          data: ['Total Cases', 'Total Recovered', 'Total Deaths'],
+          data: [],
           right: '4%',
           textStyle: {
             fontSize: 12,
@@ -93,12 +82,13 @@ export default {
         grid: {
           top: 100,
           left: '2%',
-          right: '2%',
+          right: '3%',
           bottom: '2%',
           containLabel: true
         },
         xAxis: [
           {
+            name: 'Date',
             type: 'category',
             boundaryGap: false,
             axisLine: {
@@ -106,13 +96,13 @@ export default {
                 color: '#57617B'
               }
             },
+            show: false,
             data: []
           }
         ],
         yAxis: [
           {
             type: 'value',
-            name: '(%)',
             axisTick: {
               show: false
             },
@@ -252,7 +242,16 @@ export default {
     },
     generateChartData(history) {
       const chartData = {
+        title: {
+          text: `${this.$t('route.covid19History')}: ${this.selectedCountry}`,
+          left: '1%',
+          top: '2%'
+        },
+        legend: {
+          data: ['Total Cases', 'Total Recovered', 'Total Deaths']
+        },
         xAxis: {
+          show: true,
           data: []
         },
         series: [
