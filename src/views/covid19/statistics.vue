@@ -36,7 +36,7 @@
       fit
       highlight-current-row
       :data="filteredStatistics"
-      style="width: 100%;"
+      style="width: 100%"
     >
       <el-table-column
         align="center"
@@ -99,6 +99,7 @@
 
 <script>
 import rapidapi from '@/utils/rapidapi'
+import { Covid19Module } from '@/store/modules/covid19'
 
 export default {
   data: () => ({
@@ -112,11 +113,11 @@ export default {
   }),
   computed: {
     filteredCountries() {
-      const items = this.statistics.filter(item =>
+      const items = this.statistics.filter((item) =>
         this.filterByValues.continent.includes(item?.continent)
       )
       const countries = []
-      items.forEach(item => {
+      items.forEach((item) => {
         countries.push(item?.country)
       })
       return countries
@@ -126,7 +127,7 @@ export default {
 
       for (const val in this.filterByValues) {
         if (this.filterByValues[val].length > 0) {
-          items = items.filter(item =>
+          items = items.filter((item) =>
             this.filterByValues[val].includes(item[val])
           )
         }
@@ -136,14 +137,17 @@ export default {
   },
   methods: {
     async getData() {
-      rapidapi.get('statistics').then(data => {
-        this.statistics = data?.response
-        this.statistics.forEach(item => {
-          if (!this.continents.includes(item?.continent)) {
-            this.continents.push(item?.continent)
-          }
-          this.countries.push(item?.country)
+      if (Covid19Module.getStatistics.length === 0) {
+        await rapidapi.get('statistics').then((data) => {
+          Covid19Module.setStatistics(data?.response)
         })
+      }
+      this.statistics = Covid19Module.getStatistics
+      this.statistics.forEach((item) => {
+        if (!this.continents.includes(item?.continent)) {
+          this.continents.push(item?.continent)
+        }
+        this.countries.push(item?.country)
       })
     }
   },
@@ -153,7 +157,7 @@ export default {
   watch: {
     'filterByValues.continent'() {
       this.filterByValues.country = this.filterByValues.country.filter(
-        country => this.filteredCountries.includes(country)
+        (country) => this.filteredCountries.includes(country)
       )
     }
   }

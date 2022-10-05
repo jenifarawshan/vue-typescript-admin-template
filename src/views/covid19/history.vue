@@ -23,6 +23,7 @@
 <script>
 import * as echarts from 'echarts'
 import rapidapi from '@/utils/rapidapi'
+import { Covid19Module } from '@/store/modules/covid19'
 
 export default {
   data: () => ({
@@ -32,22 +33,34 @@ export default {
     chart: {}
   }),
   methods: {
-    getCountries() {
-      rapidapi.get('countries').then((data) => {
-        this.countryList = data?.response
-      })
+    async getCountries() {
+      if (Covid19Module.getCountryList.length === 0) {
+        await rapidapi.get('countries').then((data) => {
+          Covid19Module.setCountryList(data?.response)
+        })
+      }
+
+      this.countryList = Covid19Module.getCountryList
     },
     async countryChangeCallback() {
       this.history = await this.getData()
       const chartData = this.generateChartData(this.history)
       this.updateChart(chartData)
     },
-    getData() {
-      return rapidapi
-        .get('history', {
-          params: { country: this.selectedCountry }
-        })
-        .then((data) => data?.response)
+    async getData() {
+      if (!Covid19Module.getHistory[this.selectedCountry]) {
+        await rapidapi
+          .get('history', {
+            params: { country: this.selectedCountry }
+          })
+          .then((data) => {
+            Covid19Module.setCountryInHistory({
+              name: this.selectedCountry,
+              history: data?.response
+            })
+          })
+      }
+      return Covid19Module.getHistory[this.selectedCountry]
     },
     initChart() {
       this.chart = echarts.init(this.$refs.chartContainer)
